@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class DistrictBoard {
     
     // holds the board
-    private byte[][] board;
+    private int[][] board;
     
     /**
      * Initializes a random M x N board, with a random ratio of red/blue.
@@ -38,14 +38,17 @@ public class DistrictBoard {
      */
     public DistrictBoard(String filename) {
         Path file = FileSystems.getDefault().getPath("../Gerrymander/data/", filename);
-        //System.out.println(file.toString());
         try (BufferedReader reader = Files.newBufferedReader(file)) {
+            // get the dimensions from the first line (M N)
             String line = reader.readLine();
-            Integer[] dim = Arrays.stream(line.split(" ")).map(s -> Integer.parseInt(s)).toArray(Integer[]::new);
-            board = new byte[dim[0]][dim[1]];
-//            System.out.println("Should be 5: " + board.length);
-//            System.out.println("Should be 6: " + board[0].length);
+            int[] dim = Arrays.stream(line.split(" ")).map(s -> Integer.parseInt(s)).mapToInt(s -> s).toArray();
+            board = new int[dim[0]][dim[1]];
             
+            // read the remaining lines into the board array
+            for (int i = 0; i < dim[0]; i++) {
+                line = reader.readLine();
+                board[i] = Arrays.stream(line.split(" ")).map(s -> Integer.parseInt(s)).mapToInt(s -> s).toArray();
+            }
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
         }
