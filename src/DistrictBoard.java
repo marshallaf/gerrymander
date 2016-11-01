@@ -54,7 +54,19 @@ public class DistrictBoard {
         }
     }
     
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                sb.append(board[i][j] + " ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+    
     public static void main(String[] args) {
         DistrictBoard db = new DistrictBoard("test.txt");
+        System.out.println(db.toString());
     }
 }
