@@ -41,13 +41,13 @@ public class DistrictBoard {
         try (BufferedReader reader = Files.newBufferedReader(file)) {
             // get the dimensions from the first line (M N)
             String line = reader.readLine();
-            int[] dim = Arrays.stream(line.split(" ")).map(s -> Integer.parseInt(s)).mapToInt(s -> s).toArray();
+            int[] dim = Arrays.stream(line.split(" ")).mapToInt(s -> Integer.parseInt(s)).toArray();
             board = new int[dim[0]][dim[1]];
             
             // read the remaining lines into the board array
             for (int i = 0; i < dim[0]; i++) {
                 line = reader.readLine();
-                board[i] = Arrays.stream(line.split(" ")).map(s -> Integer.parseInt(s)).mapToInt(s -> s).toArray();
+                board[i] = Arrays.stream(line.split(" ")).mapToInt(s -> Integer.parseInt(s)).toArray();
             }
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
