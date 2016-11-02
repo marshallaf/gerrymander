@@ -81,8 +81,14 @@ public class DistrictBoard {
     }
     
     @Override
-    public boolean equals(DistrictBoard other) {
-        
+    public boolean equals(Object o) {
+        DistrictBoard other = (DistrictBoard) o;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] != other.getSquare(i, j)) return false;
+            }
+        }
+        return true;
     }
     
     public String toString() {
