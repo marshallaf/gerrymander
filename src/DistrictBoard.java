@@ -54,6 +54,37 @@ public class DistrictBoard {
         }
     }
     
+    public int getSquare(int row, int col) {
+        return board[row][col];
+    }
+    
+    /**
+     * Returns the valid moves from a given square.
+     * 
+     * @param startRow row index of start square
+     * @param startCol column index of start square
+     * @return 3x3 array of booleans, center representing start square, true if valid move
+     */
+    private boolean[][] validMoves(int startRow, int startCol) {
+        boolean[][] moves = new boolean[3][3];
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (board[i][j] < 2) moves[i][j] = true;
+                else moves[i][j] = false;
+            }
+        }
+        return moves;
+    }
+    
+    public Iterable<DistrictBoard> nextBoards(int activeDistrict) {
+        
+    }
+    
+    @Override
+    public boolean equals(DistrictBoard other) {
+        
+    }
+    
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < board.length; i++) {
