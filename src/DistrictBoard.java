@@ -1,10 +1,13 @@
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 public class DistrictBoard {
     
@@ -59,6 +62,49 @@ public class DistrictBoard {
         }
     }
     
+    public LinkedList<BoardPermute> solve(int districtSize) {
+        // calculate the number of votes to win a district
+        int votesToWin = districtSize / 2;
+        if (districtSize % 2 != 0) {
+            votesToWin++;
+        }
+        
+        int district = 0;
+        LinkedList<BoardPermute> possBoards = new LinkedList<BoardPermute>();
+        possBoards.add(new BoardPermute(boardRows, boardCols));
+        
+        // for each unassigned square
+        for (int i = 0; i < boardRows*boardCols; i++) {
+            int currPossBoards = possBoards.size();
+            int assignedToDistrict = (i+1) % districtSize;
+            for (int j = 0; j < currPossBoards; j++) {
+                BoardPermute possBoard = possBoards.poll();
+                // a new district needs to start
+                if (assignedToDistrict == 0) {
+                    district++;
+                    Point move = possBoard.newDistrict();
+                    possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
+                }
+                // or an old district needs to expand
+                else {
+                    ArrayList<Point> moves = possBoard.expandDistrict(district);
+                    for (Point move : moves) {
+                        // check if move would invalidate the district
+                        int otherVotes = assignedToDistrict - (possBoard.districtScore(district) + getSquare(move));
+                        if (otherVotes < votesToWin) possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
+                    }
+                }
+            }
+            
+        }
+        
+        return possBoards;
+    }
+    
+    public int getSquare(Point p) {
+        return board[(int) p.getX()][(int) p.getY()];
+    }
+    
     public int getSquare(int row, int col) {
         return board[row][col];
     }
@@ -79,40 +125,6 @@ public class DistrictBoard {
             }
         }
         return moves;
-    }
-    
-    // I think this won't work for what I need, but I'll keep it for
-    // now, just in case
-    public Iterable<DistrictBoard> nextBoards(int activeDistrict) {
-        HashSet<DistrictBoard> nextBoards = new HashSet<>();
-        // array for keeping track of the squares we've checked
-        boolean[][] checked = new boolean[boardRows][boardCols];
-        for (int i = 0; i < boardRows; i++) {
-            for (int j = 0; j < boardCols; j++) {
-                checked[i][j] = false;
-            }
-        }
-        // iterate through the board looking for the active district
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (board[i][j] == activeDistrict) {
-                    checked[i][j] = true;
-                    // iterate over the possible moves
-                    for (int m = -1; m <= 1; m++) {
-                        for (int n = -1; n <= 1; n++) {
-                            // if move is to a square that we haven't checked
-                            if (!checked[i + m][j + n]) {
-                                // if square is not already assigned
-                                if (board[i + m][j + n] < 2) {
-                                    // create new board and add to set
-                                    nextBoards.add(newBoard(i+m, j+n, activeDistrict));
-                                } else checked[i + m][j + n] = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
     
     @Override
@@ -139,6 +151,6 @@ public class DistrictBoard {
     
     public static void main(String[] args) {
         DistrictBoard db = new DistrictBoard("test.txt");
-        System.out.println(db.toString());
+        LinkedList<BoardPermute> solutions = db.solve(3);
     }
 }

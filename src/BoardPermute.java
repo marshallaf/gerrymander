@@ -1,5 +1,6 @@
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Andrew Marshall
@@ -11,6 +12,7 @@ public class BoardPermute {
     private int[][] possibleBoard;
     private int rows, cols;
     private boolean checked[][];
+    private HashMap<Integer, Integer> districts;
     
     public BoardPermute(int m, int n) {
         rows = m;
@@ -25,7 +27,15 @@ public class BoardPermute {
         }
     }
     
-    private BoardPermute(int[][] oldBoard, Point square, int activeDistrict) {
+    private BoardPermute(int[][] oldBoard, HashMap<Integer, Integer> oldDistricts, Point square, int activeDistrict, int addToScore) {
+        districts = new HashMap<Integer, Integer>();
+        districts.putAll(oldDistricts);
+        if (districts.containsKey(activeDistrict)) {
+            districts.put(activeDistrict, districts.get(activeDistrict)+addToScore);
+        } else {
+            districts.put(activeDistrict, addToScore);
+        }
+        
         rows = oldBoard.length;
         cols = oldBoard[0].length;
         possibleBoard = new int[rows][cols];
@@ -44,8 +54,8 @@ public class BoardPermute {
         }
     }
     
-    public BoardPermute copyBoardWithChange(Point square, int activeDistrict) {
-        return new BoardPermute(possibleBoard, square, activeDistrict);
+    public BoardPermute copyBoardWithChange(Point square, int activeDistrict, int addToScore) {
+        return new BoardPermute(possibleBoard, districts, square, activeDistrict, addToScore);
     }
     
     public ArrayList<Point> expandDistrict(int activeDistrict) {
@@ -85,4 +95,12 @@ public class BoardPermute {
         }
         return null;
     }
+    
+    public int districtScore(int district) {
+        if (districts.containsKey(district)) {
+            return districts.get(district);
+        }
+        return 0;
+    }
+
 }
