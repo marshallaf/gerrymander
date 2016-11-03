@@ -102,5 +102,16 @@ public class BoardPermute {
         }
         return 0;
     }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                sb.append(possibleBoard[i][j] + " ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 
 }
