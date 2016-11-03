@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 public class DistrictBoard {
@@ -104,38 +103,6 @@ public class DistrictBoard {
         return board[(int) p.row][(int) p.col];
     }
     
-    public int getSquare(int row, int col) {
-        return board[row][col];
-    }
-    
-    /**
-     * Returns the valid moves from a given square.
-     * 
-     * @param startRow row index of start square
-     * @param startCol column index of start square
-     * @return 3x3 array of booleans, center representing start square, true if valid move
-     */
-    public boolean[][] validMoves(int startRow, int startCol) {
-        boolean[][] moves = new boolean[3][3];
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (board[startRow + i][startCol + j] < 2) moves[i+1][j+1] = true;
-                else moves[i+1][j+1] = false;
-            }
-        }
-        return moves;
-    }
-    
-    @Override
-    public boolean equals(Object o) {
-        DistrictBoard other = (DistrictBoard) o;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                if (board[i][j] != other.getSquare(i, j)) return false;
-            }
-        }
-        return true;
-    }
     
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -149,8 +116,8 @@ public class DistrictBoard {
     }
     
     public static void main(String[] args) {
-        DistrictBoard db = new DistrictBoard("test3x3a.txt");
-        LinkedList<BoardPermute> solutions = db.solve(3);
+        DistrictBoard db = new DistrictBoard("test.txt");
+        LinkedList<BoardPermute> solutions = db.solve(5);
         for (BoardPermute bp : solutions) {
             System.out.println(bp);
             System.out.println("==============");
