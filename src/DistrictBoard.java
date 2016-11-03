@@ -1,4 +1,4 @@
-import java.awt.Point;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -64,34 +64,33 @@ public class DistrictBoard {
     
     public LinkedList<BoardPermute> solve(int districtSize) {
         // calculate the number of votes to win a district
-        int votesToWin = districtSize / 2;
-        if (districtSize % 2 != 0) {
-            votesToWin++;
-        }
+        double votesToWin = districtSize / 2.0;
         
         int district = 0;
         LinkedList<BoardPermute> possBoards = new LinkedList<BoardPermute>();
         possBoards.add(new BoardPermute(boardRows, boardCols));
         
         // for each unassigned square
-        for (int i = 0; i < boardRows*boardCols; i++) {
+        int unassigned = boardRows*boardCols;
+        for (int i = 0; i < unassigned; i++) {
             int currPossBoards = possBoards.size();
-            int assignedToDistrict = (i+1) % districtSize;
+            int assignedToDistrict = i % districtSize;
+            if (assignedToDistrict == 0) district++;
             for (int j = 0; j < currPossBoards; j++) {
                 BoardPermute possBoard = possBoards.poll();
                 // a new district needs to start
                 if (assignedToDistrict == 0) {
-                    district++;
-                    Point move = possBoard.newDistrict();
+                    Square move = possBoard.newDistrict();
                     possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
                 }
                 // or an old district needs to expand
                 else {
-                    ArrayList<Point> moves = possBoard.expandDistrict(district);
-                    for (Point move : moves) {
+                    ArrayList<Square> moves = possBoard.expandDistrict(district);
+                    for (Square move : moves) {
                         // check if move would invalidate the district
-                        int otherVotes = assignedToDistrict - (possBoard.districtScore(district) + getSquare(move));
-                        if (otherVotes < votesToWin) possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
+                        int newScore = possBoard.districtScore(district) + getSquare(move);
+                        int otherVotes = (assignedToDistrict+1) - newScore;
+                        if (newScore == 0 || otherVotes < votesToWin) possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
                     }
                 }
             }
@@ -101,8 +100,8 @@ public class DistrictBoard {
         return possBoards;
     }
     
-    public int getSquare(Point p) {
-        return board[(int) p.getX()][(int) p.getY()];
+    public int getSquare(Square p) {
+        return board[(int) p.row][(int) p.col];
     }
     
     public int getSquare(int row, int col) {
@@ -150,7 +149,11 @@ public class DistrictBoard {
     }
     
     public static void main(String[] args) {
-        DistrictBoard db = new DistrictBoard("test.txt");
+        DistrictBoard db = new DistrictBoard("test3x3a.txt");
         LinkedList<BoardPermute> solutions = db.solve(3);
+        for (BoardPermute bp : solutions) {
+            System.out.println(bp);
+            System.out.println("==============");
+        }
     }
 }
