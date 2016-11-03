@@ -10,14 +10,17 @@ import java.util.ArrayList;
 public class BoardPermute {
     private int[][] possibleBoard;
     private int rows, cols;
+    private boolean checked[][];
     
     public BoardPermute(int m, int n) {
         rows = m;
         cols = n;
         possibleBoard = new int[rows][cols];
+        checked = new boolean[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 possibleBoard[i][j] = 0;
+                checked[i][j] = false;
             }
         }
     }
@@ -26,12 +29,16 @@ public class BoardPermute {
         rows = oldBoard.length;
         cols = oldBoard[0].length;
         possibleBoard = new int[rows][cols];
+        checked = new boolean[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (i == square.getX() && j == square.getY()) {
                     possibleBoard[i][j] = activeDistrict;
+                    checked[i][j] = true;
                 } else {
                     possibleBoard[i][j] = oldBoard[i][j];
+                    if (oldBoard[i][j] != 0) checked[i][j] = true;
+                    else checked[i][j] = false;
                 }
             }
         }
@@ -41,17 +48,8 @@ public class BoardPermute {
         return new BoardPermute(possibleBoard, square, activeDistrict);
     }
     
-    public ArrayList<Point> nextMoves(int activeDistrict) {
+    public ArrayList<Point> expandDistrict(int activeDistrict) {
         ArrayList<Point> moves = new ArrayList<>();
-        // array for keeping track of the squares we've checked
-        boolean[][] checked = new boolean[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (possibleBoard[i][j] != 0) {
-                    checked[i][j] = true;
-                } else checked[i][j] = false;
-            }
-        }
         
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -77,5 +75,14 @@ public class BoardPermute {
         }
         
         return moves;
+    }
+    
+    public Point newDistrict() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (!checked[i][j]) return new Point(i, j);
+            }
+        }
+        return null;
     }
 }
