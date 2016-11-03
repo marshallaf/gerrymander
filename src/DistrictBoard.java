@@ -76,11 +76,17 @@ public class DistrictBoard {
             int assignedToDistrict = i % districtSize;
             if (assignedToDistrict == 0) district++;
             for (int j = 0; j < currPossBoards; j++) {
+                if ((currPossBoards - j) % 10000 == 0) {
+                    System.out.println((unassigned - i) + " rounds remaining: " + (currPossBoards - j) + " possible boards remaining this round.");
+                }
                 BoardPermute possBoard = possBoards.poll();
                 // a new district needs to start
                 if (assignedToDistrict == 0) {
                     Square move = possBoard.newDistrict();
-                    possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
+                    BoardPermute newBoard = possBoard.copyBoardWithChange(move, district, getSquare(move));
+                    if (!possBoards.contains(newBoard)) {
+                        possBoards.add(newBoard);
+                    }
                 }
                 // or an old district needs to expand
                 else {
@@ -89,7 +95,14 @@ public class DistrictBoard {
                         // check if move would invalidate the district
                         int newScore = possBoard.districtScore(district) + getSquare(move);
                         int otherVotes = (assignedToDistrict+1) - newScore;
-                        if (newScore == 0 || otherVotes < votesToWin) possBoards.add(possBoard.copyBoardWithChange(move, district, getSquare(move)));
+                        if (newScore == 0 || otherVotes < votesToWin) {
+                            BoardPermute newBoard = possBoard.copyBoardWithChange(move, district, getSquare(move));
+                            // TODO: this is totally inefficient
+                            // there must be a better way but I am too tired right now to think of it
+                            if (!possBoards.contains(newBoard)) {
+                                possBoards.add(newBoard);
+                            }
+                        }
                     }
                 }
             }

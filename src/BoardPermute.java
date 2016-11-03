@@ -113,5 +113,20 @@ public class BoardPermute {
         }
         return sb.toString();
     }
+    
+    public int getDistrict(int row, int col) {
+        return possibleBoard[row][col];
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        BoardPermute other = (BoardPermute) o;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (possibleBoard[i][j] != other.getDistrict(i, j)) return false;
+            }
+        }
+        return true;
+    }
 
 }
