@@ -12,9 +12,14 @@ public class BoardPermute {
     private int rows, cols;
     private boolean checked[][];
     private HashMap<Integer, Integer> districts;
+    private int hashCode;
+    private final int rowSalt = 17;
+    private final int colSalt = 43;
+    private final int districtSalt = 61;
     
     public BoardPermute(int m, int n) {
         districts = new HashMap<>();
+        hashCode = 0;
         rows = m;
         cols = n;
         possibleBoard = new int[rows][cols];
@@ -27,7 +32,7 @@ public class BoardPermute {
         }
     }
     
-    private BoardPermute(int[][] oldBoard, HashMap<Integer, Integer> oldDistricts, Square square, int activeDistrict, int addToScore) {
+    private BoardPermute(int[][] oldBoard, HashMap<Integer, Integer> oldDistricts, int oldHash, Square square, int activeDistrict, int addToScore) {
         districts = new HashMap<Integer, Integer>();
         districts.putAll(oldDistricts);
         if (districts.containsKey(activeDistrict)) {
@@ -35,6 +40,7 @@ public class BoardPermute {
         } else {
             districts.put(activeDistrict, addToScore);
         }
+        hashCode = oldHash + (square.row + rowSalt) * (square.col + colSalt) * (activeDistrict + districtSalt);
         
         rows = oldBoard.length;
         cols = oldBoard[0].length;
@@ -55,7 +61,7 @@ public class BoardPermute {
     }
     
     public BoardPermute copyBoardWithChange(Square square, int activeDistrict, int addToScore) {
-        return new BoardPermute(possibleBoard, districts, square, activeDistrict, addToScore);
+        return new BoardPermute(possibleBoard, districts, hashCode, square, activeDistrict, addToScore);
     }
     
     public ArrayList<Square> expandDistrict(int activeDistrict) {
@@ -121,12 +127,12 @@ public class BoardPermute {
     @Override
     public boolean equals(Object o) {
         BoardPermute other = (BoardPermute) o;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (possibleBoard[i][j] != other.getDistrict(i, j)) return false;
-            }
-        }
-        return true;
+        return hashCode == other.hashCode();
+    }
+    
+    @Override
+    public int hashCode() {
+        return hashCode;
     }
 
 }

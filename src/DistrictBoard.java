@@ -72,13 +72,16 @@ public class DistrictBoard {
         // for each unassigned square
         int unassigned = boardRows*boardCols;
         for (int i = 0; i < unassigned; i++) {
+//            System.out.println((unassigned - i) + " rounds remaining...");
             int currPossBoards = possBoards.size();
             int assignedToDistrict = i % districtSize;
             if (assignedToDistrict == 0) district++;
             for (int j = 0; j < currPossBoards; j++) {
-                if ((currPossBoards - j) % 10000 == 0) {
-                    System.out.println((unassigned - i) + " rounds remaining: " + (currPossBoards - j) + " possible boards remaining this round.");
-                }
+//                if ((currPossBoards - j) % 100 == 0) {
+//                    System.out.println((unassigned - i) + " rounds remaining: " + (currPossBoards - j) + " possible boards remaining this round.");
+//                }
+                if (j == 0)
+                    System.out.println((unassigned - i) + " rounds remaining: " + (currPossBoards - j) + " possible boards this round.");
                 BoardPermute possBoard = possBoards.poll();
                 // a new district needs to start
                 if (assignedToDistrict == 0) {
@@ -130,10 +133,13 @@ public class DistrictBoard {
     
     public static void main(String[] args) {
         DistrictBoard db = new DistrictBoard("test.txt");
+        long start = System.nanoTime();
         LinkedList<BoardPermute> solutions = db.solve(5);
+        long solveTime = System.nanoTime() - start;
         for (BoardPermute bp : solutions) {
             System.out.println(bp);
             System.out.println("==============");
         }
+        System.out.println("Time to solve: " + (solveTime/1000000000.0));
     }
 }
