@@ -7,13 +7,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class BoardSolver {
     
     // holds the board
-    private int[] board;
+    public static int[] board;
     // rows and columns of the board
-    private int boardRows, boardCols;
+    public int boardRows, boardCols;
     
     /**
      * Initializes a random M x N board, with a random ratio of red/blue.
@@ -92,7 +93,22 @@ public class BoardSolver {
     
     public static void main(String[] args) {
         BoardSolver db = new BoardSolver("test3x3a.txt");
-        System.out.println(db.toString());
+        
+        Graph<Integer> initial = db.buildInitialGraph();
+        BoardPermute bp = new BoardPermute();
+        bp.unassigned = initial;
+        bp.districtSize = 3;
+        bp.minScore = 2;
+        bp.board = Arrays.copyOf(board, board.length);
+        bp.possibleDistricts();
+        for (Set<Integer> district : bp.possibleDistricts) {
+            for (int square : district) {
+                System.out.print(square + " ");
+            }
+            System.out.println();
+        }
+        
+        
 //        long start = System.nanoTime();
 //        LinkedList<BoardPermute> solutions = db.solve(5);
 //        long solveTime = System.nanoTime() - start;
