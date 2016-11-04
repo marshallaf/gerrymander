@@ -11,10 +11,20 @@ import java.util.Set;
  *
  */
 public class BoardPermute {
+    
+    public class Node {
+        int value;
+        int depth;
+        Set<Integer> children;
+    }
+    
+    
     public Graph<Integer> unassigned;
     public Map<Integer, Set<Integer>> districts;
     public int districtSize;
     public Set<Set<Integer>> possibleDistricts;
+    public int minScore;
+    public int[] board;
     
     public BoardPermute() {
         districts = new HashMap<Integer, Set<Integer>>();
@@ -60,9 +70,12 @@ public class BoardPermute {
         }
     }
     
-    public class Node {
-        int value;
-        int depth;
-        Set<Integer> children;
+    private int score(Set<Integer> district) {
+        int score = 0;
+        for (int i : district) {
+            score += board[i];
+        }
+        return score;
     }
+    
 }
