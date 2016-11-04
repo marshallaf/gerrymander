@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class DistrictBoard {
+public class BoardSolver {
     
     // holds the board
     private int[] board;
@@ -21,7 +21,7 @@ public class DistrictBoard {
      * @param m height of board
      * @param n width of board
      */
-    public DistrictBoard(int m, int n) {
+    public BoardSolver(int m, int n) {
         
     }
     
@@ -32,7 +32,7 @@ public class DistrictBoard {
      * @param n width of board
      * @param ratio ratio of red/blue
      */
-    public DistrictBoard(int m, int n, float ratio) {
+    public BoardSolver(int m, int n, float ratio) {
         
     }
     
@@ -41,7 +41,7 @@ public class DistrictBoard {
      * 
      * @param filename
      */
-    public DistrictBoard(String filename) {
+    public BoardSolver(String filename) {
         Path file = FileSystems.getDefault().getPath("../Gerrymander/data/", filename);
         try (BufferedReader reader = Files.newBufferedReader(file)) {
             // get the dimensions from the first line (M N)
@@ -133,7 +133,7 @@ public class DistrictBoard {
     }
     
     public static void main(String[] args) {
-        DistrictBoard db = new DistrictBoard("test3x3a.txt");
+        BoardSolver db = new BoardSolver("test3x3a.txt");
         System.out.println(db.toString());
 //        long start = System.nanoTime();
 //        LinkedList<BoardPermute> solutions = db.solve(5);
