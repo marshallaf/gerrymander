@@ -40,13 +40,13 @@ public class BoardPermute {
         possibleDistricts = new HashSet<Set<Integer>>();
     }
     
-    public BoardPermute(Map<Integer, Set<Integer>> oldDistricts, Graph<Integer> oldGraph, Set<Integer> newDistrict) {
+    public BoardPermute(BoardPermute oldBoard, Set<Integer> newDistrict) {
         districts = new HashMap<Integer, Set<Integer>>();
-        for (Map.Entry<Integer, Set<Integer>> entry : oldDistricts.entrySet()) {
+        for (Map.Entry<Integer, Set<Integer>> entry : oldBoard.districts.entrySet()) {
             districts.put(entry.getKey(), new HashSet<Integer>(entry.getValue()));
         }
         
-        unassigned = new Graph<Integer>(oldGraph);
+        unassigned = new Graph<Integer>(oldBoard.unassigned);
         for (int member : newDistrict) {
             unassigned.removeNode(member);
         }
