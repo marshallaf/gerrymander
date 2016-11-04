@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class BoardSolver {
@@ -64,6 +65,25 @@ public class BoardSolver {
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
         }
+    }
+    
+    public LinkedList<BoardPermute> solve(int districtSize, int minScore) {
+        LinkedList<BoardPermute> permutations = new LinkedList<>();
+        if (board.length % districtSize != 0) throw new IllegalArgumentException("Board must be evenly divisible by districtSize.");
+        int totalDistricts = board.length/districtSize;
+        permutations.add(new BoardPermute(boardRows, boardCols, districtSize, minScore, board));
+        
+        for (int i = 0; i < totalDistricts; i++) {
+            int currPermutations = permutations.size();
+            for (int j = 0; j < currPermutations; j++) {
+                BoardPermute currBoard = permutations.poll();
+                for (Set<Integer> district : currBoard.possibleDistricts) {
+                    permutations.addLast(new BoardPermute(currBoard, district));
+                }
+            }
+        }
+        
+        return permutations; 
     }
     
     public Graph<Integer> buildInitialGraph() {
