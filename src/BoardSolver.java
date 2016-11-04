@@ -62,6 +62,7 @@ public class BoardSolver {
                     board[j] = lineArr[k];
                 }
             }
+            System.out.println("Finished reading file!");
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
         }
@@ -75,6 +76,7 @@ public class BoardSolver {
         
         for (int i = 0; i < totalDistricts; i++) {
             int currPermutations = permutations.size();
+            System.out.println("Round " + i + ": " + currPermutations + " permutations to process.");
             for (int j = 0; j < currPermutations; j++) {
                 BoardPermute currBoard = permutations.poll();
                 for (Set<Integer> district : currBoard.possibleDistricts) {
@@ -113,10 +115,10 @@ public class BoardSolver {
     }
     
     public static void main(String[] args) {
-        BoardSolver db = new BoardSolver("test3x3a.txt");
+        BoardSolver db = new BoardSolver("test.txt");
         
-        int districtSize = 3;
-        int minScore = 2;
+        int districtSize = 5;
+        int minScore = 3;
         LinkedList<BoardPermute> solutions = db.solve(districtSize, minScore);
         
         for (BoardPermute bp : solutions) {

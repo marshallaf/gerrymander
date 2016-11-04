@@ -45,6 +45,7 @@ public class BoardPermute {
         this.board = board;
         districts = new HashSet<Set<Integer>>();
         unassigned = buildInitialGraph();
+        System.out.println("Finished building graph!");
         possibleDistricts = new HashSet<Set<Integer>>();
         possibleDistricts();
     }
@@ -106,9 +107,11 @@ public class BoardPermute {
             }
             // if there's an isolated unassigned bit that could never be a district
             if (unassigned.minimumComponent(curr.members) < districtSize) {
+                System.out.println("excluded due to connectivity");
                 return;
             }
             // add to possibleDistricts
+            System.out.println(curr.members);
             possibleDistricts.add(curr.members);
         } else {
             // we still need more elements
