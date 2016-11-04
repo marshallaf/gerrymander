@@ -1,4 +1,5 @@
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,14 +34,28 @@ public class BoardPermute {
     public int districtSize;
     public Set<Set<Integer>> possibleDistricts;
     public int minScore;
+    public int boardRows, boardCols;
     public int[] board;
     
-    public BoardPermute() {
+    public BoardPermute(int boardRows, int boardCols, int districtSize, int minScore, int[] board) {
+        this.boardRows = boardRows;
+        this.boardCols = boardCols;
+        this.districtSize = districtSize;
+        this.minScore = minScore;
+        this.board = board;
         districts = new HashMap<Integer, Set<Integer>>();
+        unassigned = buildInitialGraph();
         possibleDistricts = new HashSet<Set<Integer>>();
+        possibleDistricts();
     }
     
     public BoardPermute(BoardPermute oldBoard, Set<Integer> newDistrict) {
+        // you should do this in a different way than just copying forever
+        this.boardRows = oldBoard.boardRows;
+        this.boardCols = oldBoard.boardCols;
+        this.districtSize = oldBoard.districtSize;
+        this.minScore = oldBoard.minScore;
+        this.board = oldBoard.board;
         districts = new HashMap<Integer, Set<Integer>>();
         for (Map.Entry<Integer, Set<Integer>> entry : oldBoard.districts.entrySet()) {
             districts.put(entry.getKey(), new HashSet<Integer>(entry.getValue()));
@@ -50,6 +65,23 @@ public class BoardPermute {
         for (int member : newDistrict) {
             unassigned.removeNode(member);
         }
+        possibleDistricts();
+    }
+    
+    public Graph<Integer> buildInitialGraph() {
+        Graph<Integer> initial = new Graph<>();
+        for (int i = 0; i < board.length; i++) {
+            initial.addNode(i);
+        }
+        for (int i = 0; i < board.length; i++) {
+            int col = i % boardCols;
+            int row = i / boardCols;
+            if (col != 0) initial.addEdge(i, i-1);
+            if (col != boardCols-1) initial.addEdge(i, i+1);
+            if (row != 0) initial.addEdge(i, i - boardCols);
+            if (row != boardRows-1) initial.addEdge(i, i + boardCols);
+        }
+        return initial;
     }
     
     public void possibleDistricts() {

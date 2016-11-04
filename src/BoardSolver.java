@@ -14,7 +14,8 @@ public class BoardSolver {
     // holds the board
     public static int[] board;
     // rows and columns of the board
-    public int boardRows, boardCols;
+    public static int boardRows;
+    public static int boardCols;
     
     /**
      * Initializes a random M x N board, with a random ratio of red/blue.
@@ -94,13 +95,10 @@ public class BoardSolver {
     public static void main(String[] args) {
         BoardSolver db = new BoardSolver("test3x3a.txt");
         
-        Graph<Integer> initial = db.buildInitialGraph();
-        BoardPermute bp = new BoardPermute();
-        bp.unassigned = initial;
-        bp.districtSize = 3;
-        bp.minScore = 2;
-        bp.board = Arrays.copyOf(board, board.length);
-        bp.possibleDistricts();
+        int districtSize = 3;
+        int minScore = 2;
+        BoardPermute bp = new BoardPermute(boardRows, boardCols, districtSize, minScore, board);
+        
         for (Set<Integer> district : bp.possibleDistricts) {
             for (int square : district) {
                 System.out.print(square + " ");
