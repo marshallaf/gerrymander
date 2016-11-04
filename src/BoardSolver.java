@@ -64,62 +64,20 @@ public class BoardSolver {
         }
     }
     
-    public LinkedList<BoardPermute> solve(int districtSize) {
-        // calculate the number of votes to win a district
-        double votesToWin = districtSize / 2.0;
-        
-        int district = 0;
-        LinkedList<BoardPermute> possBoards = new LinkedList<BoardPermute>();
-        possBoards.add(new BoardPermute(boardRows, boardCols));
-        
-        // for each unassigned square
-        int unassigned = boardRows*boardCols;
-        for (int i = 0; i < unassigned; i++) {
-//            System.out.println((unassigned - i) + " rounds remaining...");
-            int currPossBoards = possBoards.size();
-            int assignedToDistrict = i % districtSize;
-            if (assignedToDistrict == 0) district++;
-            for (int j = 0; j < currPossBoards; j++) {
-//                if ((currPossBoards - j) % 100 == 0) {
-//                    System.out.println((unassigned - i) + " rounds remaining: " + (currPossBoards - j) + " possible boards remaining this round.");
-//                }
-                if (j == 0)
-                    System.out.println((unassigned - i) + " rounds remaining: " + (currPossBoards - j) + " possible boards this round.");
-                BoardPermute possBoard = possBoards.poll();
-                // a new district needs to start
-                if (assignedToDistrict == 0) {
-                    Square move = possBoard.newDistrict();
-                    BoardPermute newBoard = possBoard.copyBoardWithChange(move, district, getSquare(move));
-                    if (!possBoards.contains(newBoard)) {
-                        possBoards.add(newBoard);
-                    }
-                }
-                // or an old district needs to expand
-                else {
-                    ArrayList<Square> moves = possBoard.expandDistrict(district);
-                    for (Square move : moves) {
-                        // check if move would invalidate the district
-                        int newScore = possBoard.districtScore(district) + getSquare(move);
-                        int otherVotes = (assignedToDistrict+1) - newScore;
-                        if (newScore == 0 || otherVotes < votesToWin) {
-                            BoardPermute newBoard = possBoard.copyBoardWithChange(move, district, getSquare(move));
-                            // TODO: this is totally inefficient
-                            // there must be a better way but I am too tired right now to think of it
-                            if (!possBoards.contains(newBoard)) {
-                                possBoards.add(newBoard);
-                            }
-                        }
-                    }
-                }
-            }
-            
+    public Graph<Integer> buildInitialGraph() {
+        Graph<Integer> initial = new Graph<>();
+        for (int i = 0; i < board.length; i++) {
+            initial.addNode(i);
         }
-        
-        return possBoards;
-    }
-    
-    public int getSquare(Square p) {
-        return board[(int) p.row][(int) p.col];
+        for (int i = 0; i < board.length; i++) {
+            int col = i % boardCols;
+            int row = i / boardCols;
+            if (col != 0) initial.addEdge(i, i-1);
+            if (col != boardCols-1) initial.addEdge(i, i+1);
+            if (row != 0) initial.addEdge(i, i - boardCols);
+            if (row != boardRows-1) initial.addEdge(i, i + boardCols);
+        }
+        return initial;
     }
     
     
