@@ -43,11 +43,19 @@ public class Graph {
         map.get(removeFrom).remove(remove);
     }
     
+    public Set<Square> getAdjacent(Square base) {
+        return map.get(base);
+    }
+    
     public void splitDistrict(Set<Square> squares) {
-        Set<Square> adjacent = new HashSet<>();
+        District d = new District();
         for (Square square : squares) {
-            
+            d.members.add(square);
+            Set<Square> adj = getAdjacent(square);
+            for (Square removeFrom : adj) {
+                removeAdjacent(square, removeFrom);
+            }
+            d.adjacent.addAll(adj);
         }
-        
     }
 }
