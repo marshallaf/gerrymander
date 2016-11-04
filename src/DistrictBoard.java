@@ -11,7 +11,7 @@ import java.util.LinkedList;
 public class DistrictBoard {
     
     // holds the board
-    private int[][] board;
+    private int[] board;
     // rows and columns of the board
     private int boardRows, boardCols;
     
@@ -49,12 +49,15 @@ public class DistrictBoard {
             int[] dim = Arrays.stream(line.split(" ")).mapToInt(s -> Integer.parseInt(s)).toArray();
             boardRows = dim[0];
             boardCols = dim[1];
-            board = new int[boardRows][boardCols];
+            board = new int[boardRows*boardCols];
             
             // read the remaining lines into the board array
             for (int i = 0; i < boardRows; i++) {
                 line = reader.readLine();
-                board[i] = Arrays.stream(line.split(" ")).mapToInt(s -> Integer.parseInt(s)).toArray();
+                int lineArr[] = Arrays.stream(line.split(" ")).mapToInt(s -> Integer.parseInt(s)).toArray();
+                for (int j = i * boardCols, k = 0; k < boardCols; j++, k++) {
+                    board[j] = lineArr[k];
+                }
             }
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
