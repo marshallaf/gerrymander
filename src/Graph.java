@@ -25,4 +25,8 @@ public class Graph<Node> {
     public Set<Node> getAdjacent(Node node) {
         return map.get(node);
     }
+    
+    public Node popKey() {
+        return map.keySet().iterator().next();
+    }
 }
