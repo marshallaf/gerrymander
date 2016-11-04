@@ -65,10 +65,7 @@ public class BoardPermute {
         this.districtSize = oldBoard.districtSize;
         this.minScore = oldBoard.minScore;
         this.board = oldBoard.board;
-        districts = new HashSet<Set<Integer>>();
-        for (Set<Integer> district : oldBoard.districts) {
-            districts.add(district);
-        }
+        districts = new HashSet<Set<Integer>>(oldBoard.districts);
         districts.add(newDistrict);
         
         unassigned = new Graph<Integer>(oldBoard.unassigned);
@@ -110,6 +107,7 @@ public class BoardPermute {
         
         for (int i = 0; i < districtSize; i++) {
             int currPermute = tempDistricts.size();
+            System.out.println("Assigned " + i + " districts: " + currPermute + " permutations this round.");
             for (int j = 0; j < currPermute; j++) {
                 District curr = tempDistricts.poll();
                 
@@ -136,6 +134,11 @@ public class BoardPermute {
                         d.members.add(child);
                         d.adjacent.addAll(unassigned.getAdjacent(child));
                         d.adjacent.removeAll(d.members);
+                        // make sure score is still going to work
+                        int score = score(d.members);
+                        int otherScore = d.members.size() - score;
+                        if (score != 0 && otherScore > minScore) continue;
+                        // don't add it if we've already got this tempDistrict
                         if (!tempDistricts.contains(d)) {
                             tempDistricts.add(d);
                         }

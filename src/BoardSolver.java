@@ -115,17 +115,18 @@ public class BoardSolver {
     }
     
     public static void main(String[] args) {
-        BoardSolver db = new BoardSolver("test3x3a.txt");
+        BoardSolver db = new BoardSolver("colorado-blue.txt");
         
-        int districtSize = 3;
-        int minScore = 2;
+        int districtSize = 20;
+        int minScore = 10;
+        long start = System.nanoTime();
         LinkedList<BoardPermute> solutions = db.solve(districtSize, minScore);
-        
+        long solveTime = System.nanoTime() - start;
         for (BoardPermute bp : solutions) {
             System.out.println(bp);
             System.out.println();
         }
-        
+        System.out.println("Time to solve: " + (solveTime/1000000000.0));
         
 //        long start = System.nanoTime();
 //        LinkedList<BoardPermute> solutions = db.solve(5);
