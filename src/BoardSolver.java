@@ -19,27 +19,6 @@ public class BoardSolver {
     public static int boardCols;
     
     /**
-     * Initializes a random M x N board, with a random ratio of red/blue.
-     * 
-     * @param m height of board
-     * @param n width of board
-     */
-    public BoardSolver(int m, int n) {
-        
-    }
-    
-    /**
-     * Initializes a random M x N board, with the given ratio of red/blue.
-     * 
-     * @param m height of board
-     * @param n width of board
-     * @param ratio ratio of red/blue
-     */
-    public BoardSolver(int m, int n, float ratio) {
-        
-    }
-    
-    /**
      * Initializes a board from the given file.
      * 
      * @param filename
