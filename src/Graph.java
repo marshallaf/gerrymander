@@ -5,13 +5,28 @@ import java.util.Set;
 
 public class Graph {
     // map of Nodes to adjacent Nodes
-    private Map<Square, Set<Square>> map = new HashMap<>();
+    public Map<Square, Set<Square>> map = new HashMap<>();
+    // map of assigned districts
+    public Set<District> districts = new HashSet<>();
     
     public Graph(int rows, int cols) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 addNode(new Square(i, j));
             }
+        }
+    }
+    
+    public Graph(Graph toCopy) {
+        for (Square key : toCopy.map.keySet()) {
+            map.put(key, new HashSet<Square>());
+            for (Square adj : toCopy.map.get(key)) {
+                map.get(key).add(adj);
+            }
+        }
+        
+        for (District district : toCopy.districts) {
+            districts.add(district);
         }
     }
     
@@ -26,5 +41,13 @@ public class Graph {
     
     public void removeAdjacent(Square remove, Square removeFrom) {
         map.get(removeFrom).remove(remove);
+    }
+    
+    public void splitDistrict(Set<Square> squares) {
+        Set<Square> adjacent = new HashSet<>();
+        for (Square square : squares) {
+            
+        }
+        
     }
 }
