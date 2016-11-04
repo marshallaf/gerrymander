@@ -117,12 +117,10 @@ public class BoardSolver {
         
         int districtSize = 3;
         int minScore = 2;
-        BoardPermute bp = new BoardPermute(boardRows, boardCols, districtSize, minScore, board);
+        LinkedList<BoardPermute> solutions = db.solve(districtSize, minScore);
         
-        for (Set<Integer> district : bp.possibleDistricts) {
-            for (int square : district) {
-                System.out.print(square + " ");
-            }
+        for (BoardPermute bp : solutions) {
+            System.out.println(bp);
             System.out.println();
         }
         

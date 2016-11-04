@@ -32,6 +32,7 @@ public class Graph<Node> {
         for (Node adjNode : adj) {
             map.get(adjNode).remove(node);
         }
+        map.remove(node);
     }
     
     public Set<Node> getAdjacent(Node node) {

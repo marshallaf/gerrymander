@@ -66,6 +66,7 @@ public class BoardPermute {
         for (int member : newDistrict) {
             unassigned.removeNode(member);
         }
+        possibleDistricts = new HashSet<Set<Integer>>();
         possibleDistricts();
     }
     
@@ -87,7 +88,8 @@ public class BoardPermute {
     
     public void possibleDistricts() {
         District start = new District();
-        int key = unassigned.popKey();
+        Integer key = unassigned.popKey();
+        if (key == null) return;
         start.members.add(key);
         start.adjacent.addAll(unassigned.getAdjacent(key));
         traverse(start);
