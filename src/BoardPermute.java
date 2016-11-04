@@ -31,7 +31,7 @@ public class BoardPermute {
         possibleDistricts = new HashSet<Set<Integer>>();
     }
     
-    public void possibleDistricts(int base) {
+    public void possibleDistricts() {
         Node root = new Node();
         root.value = unassigned.popKey();
         root.depth = 1;
