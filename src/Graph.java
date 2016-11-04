@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,6 +28,9 @@ public class Graph<Node> {
     }
     
     public Node popKey() {
-        return map.keySet().iterator().next();
+        Iterator<Node> i = map.keySet().iterator();
+        if (i.hasNext())
+            return i.next();
+        else return null;
     }
 }
