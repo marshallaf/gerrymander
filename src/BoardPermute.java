@@ -2,6 +2,7 @@
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +27,12 @@ public class BoardPermute {
             members = new HashSet<Integer>(d.members);
             adjacent = new HashSet<Integer>(d.adjacent);
         }
+        
+        public boolean equals(Object o) {
+            District other = (District) o;
+            if (members.equals(other.members)) return true;
+            return false;
+        }
     }
     
     
@@ -33,6 +40,7 @@ public class BoardPermute {
     public Set<Set<Integer>> districts;
     public int districtSize;
     public Set<Set<Integer>> possibleDistricts;
+    public LinkedList<District> tempDistricts;
     public int minScore;
     public int boardRows, boardCols;
     public int[] board;
@@ -59,7 +67,7 @@ public class BoardPermute {
         this.board = oldBoard.board;
         districts = new HashSet<Set<Integer>>();
         for (Set<Integer> district : oldBoard.districts) {
-            districts.add(new HashSet<Integer>(district));
+            districts.add(district);
         }
         districts.add(newDistrict);
         
@@ -88,39 +96,51 @@ public class BoardPermute {
     }
     
     public void possibleDistricts() {
+        tempDistricts = new LinkedList<District>();
         District start = new District();
         Integer key = unassigned.popKey();
         if (key == null) return;
         start.members.add(key);
         start.adjacent.addAll(unassigned.getAdjacent(key));
-        traverse(start);
+        tempDistricts.add(start);
+        traverse();
     }
     
-    private void traverse(District curr) {
-        if (curr.members.size() == districtSize) {
-            // we've hit the right size, now validate it
-            
-            // if the score is too low, do nothing
-            int score = score(curr.members);
-            if (score < minScore && score != 0) {
-                return;
-            }
-            // if there's an isolated unassigned bit that could never be a district
-            if (unassigned.minimumComponent(curr.members) < districtSize) {
-                System.out.println("excluded due to connectivity");
-                return;
-            }
-            // add to possibleDistricts
-            System.out.println(curr.members);
-            possibleDistricts.add(curr.members);
-        } else {
-            // we still need more elements
-            for (int child : curr.adjacent) {
-                District d = new District(curr);
-                d.members.add(child);
-                d.adjacent.addAll(unassigned.getAdjacent(child));
-                d.adjacent.removeAll(d.members);
-                traverse(d);
+    private void traverse() {
+        
+        for (int i = 0; i < districtSize; i++) {
+            int currPermute = tempDistricts.size();
+            for (int j = 0; j < currPermute; j++) {
+                District curr = tempDistricts.poll();
+                
+                if (curr.members.size() == districtSize) {
+                    // we've hit the right size, now validate it
+                    
+                    // if the score is too low, do nothing
+                    int score = score(curr.members);
+                    if (score < minScore && score != 0) {
+                        continue;
+                    }
+                    // if there's an isolated unassigned bit that could never be a district
+                    if (unassigned.minimumComponent(curr.members) < districtSize) {
+        //                System.out.println("excluded due to connectivity");
+                        continue;
+                    }
+                    // add to possibleDistricts
+        //            System.out.println(curr.members);
+                    possibleDistricts.add(curr.members);
+                } else {
+                    // we still need more elements
+                    for (int child : curr.adjacent) {
+                        District d = new District(curr);
+                        d.members.add(child);
+                        d.adjacent.addAll(unassigned.getAdjacent(child));
+                        d.adjacent.removeAll(d.members);
+                        if (!tempDistricts.contains(d)) {
+                            tempDistricts.add(d);
+                        }
+                    }
+                }
             }
         }
     }

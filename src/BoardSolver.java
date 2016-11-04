@@ -115,10 +115,10 @@ public class BoardSolver {
     }
     
     public static void main(String[] args) {
-        BoardSolver db = new BoardSolver("test.txt");
+        BoardSolver db = new BoardSolver("test3x3a.txt");
         
-        int districtSize = 5;
-        int minScore = 3;
+        int districtSize = 3;
+        int minScore = 2;
         LinkedList<BoardPermute> solutions = db.solve(districtSize, minScore);
         
         for (BoardPermute bp : solutions) {
