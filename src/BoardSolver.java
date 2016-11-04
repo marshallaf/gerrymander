@@ -86,24 +86,7 @@ public class BoardSolver {
         }
         
         return permutations; 
-    }
-    
-    public Graph<Integer> buildInitialGraph() {
-        Graph<Integer> initial = new Graph<>();
-        for (int i = 0; i < board.length; i++) {
-            initial.addNode(i);
-        }
-        for (int i = 0; i < board.length; i++) {
-            int col = i % boardCols;
-            int row = i / boardCols;
-            if (col != 0) initial.addEdge(i, i-1);
-            if (col != boardCols-1) initial.addEdge(i, i+1);
-            if (row != 0) initial.addEdge(i, i - boardCols);
-            if (row != boardRows-1) initial.addEdge(i, i + boardCols);
-        }
-        return initial;
-    }
-    
+    }    
     
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -127,14 +110,6 @@ public class BoardSolver {
             System.out.println();
         }
         System.out.println("Time to solve: " + (solveTime/1000000000.0));
-        
-//        long start = System.nanoTime();
-//        LinkedList<BoardPermute> solutions = db.solve(5);
-//        long solveTime = System.nanoTime() - start;
-//        for (BoardPermute bp : solutions) {
-//            System.out.println(bp);
-//            System.out.println("==============");
-//        }
-//        System.out.println("Time to solve: " + (solveTime/1000000000.0));
+
     }
 }
