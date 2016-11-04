@@ -33,4 +33,11 @@ public class Graph<Node> {
             return i.next();
         else return null;
     }
+    
+    public int minimumComponent(Set<Node> exclude) {
+        // TODO: implement this
+        
+        // placeholder return
+        return Integer.MAX_VALUE;
+    }
 }
