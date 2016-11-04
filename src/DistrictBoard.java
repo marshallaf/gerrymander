@@ -126,23 +126,22 @@ public class DistrictBoard {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                sb.append(board[i][j] + " ");
-            }
-            sb.append("\n");
+            if (i % boardCols == 0) sb.append("\n");
+            sb.append(board[i] + " ");
         }
         return sb.toString();
     }
     
     public static void main(String[] args) {
-        DistrictBoard db = new DistrictBoard("test.txt");
-        long start = System.nanoTime();
-        LinkedList<BoardPermute> solutions = db.solve(5);
-        long solveTime = System.nanoTime() - start;
-        for (BoardPermute bp : solutions) {
-            System.out.println(bp);
-            System.out.println("==============");
-        }
-        System.out.println("Time to solve: " + (solveTime/1000000000.0));
+        DistrictBoard db = new DistrictBoard("test3x3a.txt");
+        System.out.println(db.toString());
+//        long start = System.nanoTime();
+//        LinkedList<BoardPermute> solutions = db.solve(5);
+//        long solveTime = System.nanoTime() - start;
+//        for (BoardPermute bp : solutions) {
+//            System.out.println(bp);
+//            System.out.println("==============");
+//        }
+//        System.out.println("Time to solve: " + (solveTime/1000000000.0));
     }
 }
