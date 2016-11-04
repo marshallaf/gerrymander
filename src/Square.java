@@ -10,4 +10,10 @@ public class Square {
     public String toString() {
         return "[" + row + ", " + col + "]";
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        Square other = (Square) o;
+        return (row == other.row && col == other.col);
+    }
 }

@@ -6,7 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class DistrictBoard {
     
@@ -14,6 +16,8 @@ public class DistrictBoard {
     private int[][] board;
     // rows and columns of the board
     private int boardRows, boardCols;
+    // graph of unassigned votes
+    private HashMap<Square, Set<Square>> unassigned;
     
     /**
      * Initializes a random M x N board, with a random ratio of red/blue.
@@ -132,9 +136,9 @@ public class DistrictBoard {
     }
     
     public static void main(String[] args) {
-        DistrictBoard db = new DistrictBoard("test.txt");
+        DistrictBoard db = new DistrictBoard("colorado-blue.txt");
         long start = System.nanoTime();
-        LinkedList<BoardPermute> solutions = db.solve(5);
+        LinkedList<BoardPermute> solutions = db.solve(20);
         long solveTime = System.nanoTime() - start;
         for (BoardPermute bp : solutions) {
             System.out.println(bp);
