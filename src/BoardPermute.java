@@ -30,7 +30,7 @@ public class BoardPermute {
     
     
     public Graph<Integer> unassigned;
-    public Map<Integer, Set<Integer>> districts;
+    public Set<Set<Integer>> districts;
     public int districtSize;
     public Set<Set<Integer>> possibleDistricts;
     public int minScore;
@@ -43,7 +43,7 @@ public class BoardPermute {
         this.districtSize = districtSize;
         this.minScore = minScore;
         this.board = board;
-        districts = new HashMap<Integer, Set<Integer>>();
+        districts = new HashSet<Set<Integer>>();
         unassigned = buildInitialGraph();
         possibleDistricts = new HashSet<Set<Integer>>();
         possibleDistricts();
@@ -56,10 +56,11 @@ public class BoardPermute {
         this.districtSize = oldBoard.districtSize;
         this.minScore = oldBoard.minScore;
         this.board = oldBoard.board;
-        districts = new HashMap<Integer, Set<Integer>>();
-        for (Map.Entry<Integer, Set<Integer>> entry : oldBoard.districts.entrySet()) {
-            districts.put(entry.getKey(), new HashSet<Integer>(entry.getValue()));
+        districts = new HashSet<Set<Integer>>();
+        for (Set<Integer> district : oldBoard.districts) {
+            districts.add(new HashSet<Integer>(district));
         }
+        districts.add(newDistrict);
         
         unassigned = new Graph<Integer>(oldBoard.unassigned);
         for (int member : newDistrict) {
@@ -125,6 +126,23 @@ public class BoardPermute {
             score += board[i];
         }
         return score;
+    }
+    
+    public String toString() {
+        char[] str = new char[board.length];
+        char d = 'A';
+        for (Set<Integer> district : districts) {
+            for (int member : district) {
+                str[member] = d;
+            }
+            d++;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < board.length; i++) {
+            if (i % boardCols == 0) sb.append("\n");
+            sb.append(str[i] + " ");
+        }
+        return sb.toString();
     }
     
 }
