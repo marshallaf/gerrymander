@@ -5,7 +5,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class Graph<Node> {
-    private Map<Node, Set<Node>> map = new HashMap<>();
+    public Map<Node, Set<Node>> map;
+    
+    public Graph() {
+        map = new HashMap<>();
+    }
+    
+    public Graph(Graph<Node> oldGraph) {
+        map = new HashMap<>();
+        for (Map.Entry<Node, Set<Node>> entry : oldGraph.map.entrySet()) {
+            map.put(entry.getKey(), new HashSet<Node>(entry.getValue()));
+        }
+    }
     
     public void addNode(Node node) {
         map.put(node, new HashSet<Node>());
