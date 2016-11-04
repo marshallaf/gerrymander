@@ -35,6 +35,17 @@ public class BoardPermute {
         if (curr.depth == districtSize) {
             // we've hit the right size, now validate it
             
+            // if the score is too low, do nothing
+            int score = score(buildSet);
+            if (score < minScore && score != 0) {
+                return;
+            }
+            // if there's an isolated unassigned bit that could never be a district
+            if (unassigned.minimumComponent(buildSet) < districtSize) {
+                return;
+            }
+            // add to possibleDistricts
+            possibleDistricts.add(buildSet);
         } else {
             // we still need more elements
             for (int child : curr.children) {
