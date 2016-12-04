@@ -10,17 +10,17 @@ The smaller of the two puzzles was relatively easy to solve by hand. I thought i
 
 **Riddler Express**: find a way to divide these voters into five districts such that the Blue Party wins more districts than the Red Party.
 
-![alt text](https://github.com/marshallaf/gerrymander/data/express.png "Riddler Express")
+![alt text](https://github.com/marshallaf/gerrymander/blob/master/data/express.png "Riddler Express")
 
 **Riddler Classic**: what are the most districts that the Blue Party could win with an optimal gerrymandering strategy in their favor? What about the Red Party?
 
-![alt text](https://github.com/marshallaf/gerrymander/data/classic.png "Riddler Classic")
+![alt text](https://github.com/marshallaf/gerrymander/blob/master/data/classic.png "Riddler Classic")
 
 ---
 
 I sketched a rough idea of what the algorithm would do using a 3x3 board: it would start at the upper-left square and find the possible permutations of the districts. It could determine whether a particular game state could be part of an optimal solution based on how many of the squares in the districts were of the gerrymandering party. For example, in the sketch, the first two solutions on the bottom are excluded because the x party is wasting a vote in a district they will not win - that vote would be better spent in a district with one other x voter, like in the third solution on the bottom.
 
-![alt text](https://github.com/marshallaf/gerrymander/data/sketch.jpg "Sketch of simple problem")
+![alt text](https://github.com/marshallaf/gerrymander/blob/master/data/sketch.jpg "Sketch of simple problem")
 
 ###### In hindsight, I should have recognized when I drew this that this problem would be too complex to brute force.
 
